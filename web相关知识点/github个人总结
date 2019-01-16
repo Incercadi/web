@@ -1,0 +1,71 @@
+第一步：建立全局配置文件
+第二步：获得一个git仓库
+第三步：初始化一个新的仓库
+在这个仓库里面创建文件，修改文件，然后用git add 文件名 命令将修改的文件加入到缓冲区中去，
+如果需要修改的文件已经全部修改过了，不需要在做任何的操作之后就可以用 git commit -m "add 3 files"将已经修改后的文件提交到仓库里面去。
+
+分支：只有当将仓库成功提交之后才可以在这个仓库里面新建分支：
+git branch 分支名
+git branch 展示当前所在的分支
+git checkout 分支名 切换分支
+在各个分支下所做的修改并不会影响其他分支所提交的文件或者是修改
+合并分支：git merge可以将分支合并到主线分支master中。
+# 将experimental分支合并到master
+$ git merge -m 'merge experimental branch' experimental//-m单引号中填写的是注释信息
+如果两个分支对不同的文件进行了修改那么合并分支的时候就并不会出现冲突，但是如果两个分支对相同的文件进行了修改那么在合并分支的时候就会出现冲突进而合并失败。
+
+当我们完成合并后，不再需要experimental时，可以使用下面的命令删除：
+$ git branch -d experimental
+git branch -d只能删除那些已经被当前分支的合并的分支. 如果你要强制删除某个分支的话就用git branch –D
+
+
+
+如果你觉得你合并后的状态是一团乱麻，想把当前的修改都放弃，你可以用下面的命令回到合并之前的状态：
+$ git reset --hard HEAD^
+# 查看file3的内容，已经恢复到合并前的master上的文件内容
+$ cat file3
+
+查看日志：
+git log命令可以显示当前所有的提交，回车会逐行显示，q退出
+git help log显示帮助
+如果用 --stat 选项使用 git log，它会显示在每个提交（commit）中哪些文件被修改了， 这些文件分别添加或删除了多少行内容，这个命令相当于打印详细的提交记录：
+$ git log --stat
+
+
+6.3 格式化日志
+你可以按你的要求来格式化日志输出。--pretty 参数可以使用若干表现格式，如 oneline：
+$ git log --pretty=oneline
+或者你也可以使用 short 格式：
+$ git log --pretty=short
+你也可用 medium，full，fuller，email 或 raw。 如果这些格式不完全符合你的需求， 你也可以用 --pretty=format 参数定义格式。
+--graph 选项可以可视化你的提交图（commit graph），会用ASCII字符来画出一个很漂亮的提交历史（commit history）线：
+$ git log --graph --pretty=oneline
+
+
+3.2 公共 Git 仓库
+开发过程中，通常大家都会使用一个公共的仓库，并 clone 到自己的开发环境中，完成一个阶段的代码后可以告诉目标仓库的维护者来 pull 自己的代码。
+如果你和维护者都在同一台机器上有帐号，那么你们可以互相从对 方的仓库目录里直接拉所作的修改，git 命令里的仓库地址也可以是本地的某个目录名：
+$ git clone 仓库A的路径
+$ git pull 仓库B的路径
+也可以是一个ssh地址：
+$ git clone ssh://服务器/账号/仓库名称
+
+
+3.3 将修改推到一个公共仓库
+通过 http 或是 git 协议，其它维护者可以通过远程访问的方式抓取（fetch）你最近的修改，但是他们没有写权限。如何将本地私有仓库的最近修改主动上传到公共仓库中呢？
+最简单的办法就是用 git push 命令，推送本地的修改到远程 Git 仓库，执行下面的命令:
+$ git push ssh://服务器仓库地址 master:master
+或者
+$ git push ssh://服务器仓库地址 master
+git push 命令的目地仓库可以是 ssh 或 http/https 协议访问。
+
+3.4 当推送代码失败时要怎么办
+如果推送（push）结果不是快速向前 fast forward，可能会报像下面一样的错误：
+error: remote 'refs/heads/master' is not an ancestor of
+local  'refs/heads/master'.
+Maybe you are not up-to-date and need to pull first?
+error: failed to push to 'ssh://yourserver.com/~you/proj.git'
+这种情况通常是因为没有使用 git pull 获取远端仓库的最新更新，在本地修改的同时，远端仓库已经变化了（其他协作者提交了代码），此时应该先使用 git pull 合并最新的修改后再执行 git push：
+$ git pull
+$ git push ssh://服务器仓库地址 master
+

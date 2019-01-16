@@ -1,0 +1,2 @@
+whereis tomcat8 //查找Tomcat8所在位置
+tomcat中webapp目录：var/lib/tomcat8/webapps/

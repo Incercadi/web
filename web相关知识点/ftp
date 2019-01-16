@@ -1,0 +1,12 @@
+用户名：uftp
+密码：uftp
+默认的文件夹保存在/home/uftp中
+filezilla  ftp使用软件
+
+sudo apt-get install vsftpd
+ftp的配置文件在
+/etc/vsftpd.conf
+可以使用下列命令来打开，关闭，重启ftp服务
+sudo /etc/init.d/vsftpd start
+sudo /etc/init.d/vsftpd stop
+sudo /etc/init.d/vsftpd restart
